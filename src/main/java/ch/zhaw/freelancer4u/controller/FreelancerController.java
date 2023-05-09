@@ -20,7 +20,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import ch.zhaw.freelancer4u.model.Freelancer;
 import ch.zhaw.freelancer4u.model.FreelancerCreateDTO;
+import ch.zhaw.freelancer4u.model.MailInformation;
 import ch.zhaw.freelancer4u.repository.FreelancerRepository;
+import ch.zhaw.freelancer4u.service.MailValidatorService;
 
 @RestController
 @RequestMapping("/api")
@@ -29,10 +31,18 @@ public class FreelancerController {
     @Autowired
     FreelancerRepository freelancerRepository;
 
+    @Autowired
+    MailValidatorService mailValidatorService;
+
     @PostMapping("/freelancer")
     @Secured("ROLE_admin")
     public ResponseEntity<Freelancer> createFreelancer(
             @RequestBody FreelancerCreateDTO fDTO) {
+                MailValidatorService eMailValidatorService = new MailValidatorService();
+                MailInformation mailInfo= eMailValidatorService.validateEmail(fDTO.getEmail());
+                if(!mailInfo.isFormat() || mailInfo.isDisposable() || mailInfo.isDns()){
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
         Freelancer fDAO = new Freelancer(fDTO.getEmail(), fDTO.getName());
         Freelancer f = freelancerRepository.save(fDAO);
         return new ResponseEntity<>(f, HttpStatus.CREATED);

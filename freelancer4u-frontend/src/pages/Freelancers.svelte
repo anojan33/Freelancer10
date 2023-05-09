@@ -1,7 +1,7 @@
 <script>
     import axios from "axios";
-    import { jwt_token} from "../store";
     import { querystring } from "svelte-spa-router";
+    import { jwt_token } from "../store";
 
     const api_root = window.location.origin;
 
@@ -28,12 +28,13 @@
     }
 
     function getFreelancers() {
-        let query = "?pageSize=" + defaultPageSize + "&pageNumber=" + currentPage;
+        let query =
+            "?pageSize=" + defaultPageSize + "&pageNumber=" + currentPage;
 
         var config = {
             method: "get",
             url: api_root + "/api/freelancer" + query,
-            headers: {Authorization: "Bearer "+$jwt_token},
+            headers: { Authorization: "Bearer " + $jwt_token },
         };
 
         axios(config)
@@ -47,13 +48,38 @@
             });
     }
 
+    function validateEmailAndcreateFreelancer() {
+        var config = {
+            method: "get",
+            url: "https://disify.com/api/email/" + freelancer.email,
+        };
+        axios(config)
+            .then(function (response) {
+                console.log("validated email" + freelancer.email);
+                console.log(response.data);
+                if (
+                    response.data.format &&
+                    !response.data.disposable &&
+                    response.data.dns
+                ) {
+                    createFreelancer();
+                } else {
+                    alert("Email" + freelancer.email + "is not valid.");
+                }
+            })
+            .catch(function (error) {
+                alert("could not validate email");
+                console.log(error);
+            });
+    }
+
     function createFreelancer() {
         var config = {
             method: "post",
             url: api_root + "/api/freelancer",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer "+$jwt_token
+                Authorization: "Bearer " + $jwt_token,
             },
             data: freelancer,
         };
@@ -69,7 +95,6 @@
             });
     }
 </script>
-
 
 <h1 class="mt-3">Create Freelancer</h1>
 <form class="mb-5">
@@ -95,7 +120,9 @@
             />
         </div>
     </div>
-    <button type="button" class="btn btn-primary" on:click={createFreelancer}>Submit</button>
+    <button type="button" class="btn btn-primary" on:click={validateEmailAndcreateFreelancer}
+        >Submit</button
+    >
 </form>
 
 <h1>All Freelancers</h1>
