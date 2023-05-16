@@ -99,19 +99,6 @@ public class ServiceTest {
     }
     assertTrue(foundJob, "Created job not found in the job list");
   }
-/*  // delete is not working
-  @Test
-    public void testDeleteJob() {
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                "http://localhost:" + port + "/api/job/" + job.getId(), 
-                org.springframework.http.HttpMethod.DELETE,
-                null,
-                String.class);
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-
-        ResponseEntity<Job> getResponseEntity = restTemplate.getForEntity(
-                "http://localhost:" + port + "/api/job/" + job.getId(), Job.class);
-        assertEquals(HttpStatus.NOT_FOUND, getResponseEntity.getStatusCode());
-    }
-    */
+ // delete is not working
+  
 }
