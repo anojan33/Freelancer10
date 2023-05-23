@@ -1,6 +1,5 @@
 package ch.zhaw.freelancer4u;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -68,7 +67,7 @@ public class ServiceTest {
   @DisplayName("Create a new job and verify it is returned in the job list")
   public void createJobAndVerifyInList() {
     String token = UUID.randomUUID().toString();
-   
+
     JobCreateDTO jobCreateDTO = new JobCreateDTO(token, 1000.0, JobType.TEST);
     HttpHeaders headers = new HttpHeaders();
     headers.add("Content-Type", "application/json");
@@ -99,6 +98,7 @@ public class ServiceTest {
     }
     assertTrue(foundJob, "Created job not found in the job list");
   }
- // delete is not working
-  
-}
+  }
+  // delete is not working
+
+
